@@ -23,6 +23,13 @@ void test_abas_poll(volatile unsigned char *offset, uint32_t size) {
       asm volatile("nop" ::: "memory");
   }
 
+  // Force read the first charaters to keep them in cache
+  volatile uint8_t a;
+  for (int i = 0; i < 64; i++) {
+      a = offset[i];
+      asm volatile("nop" ::: "memory");
+  }
+
   set_a_model(0b1000000, true);
 
   terminal_setcolor(VGA_COLOR_WHITE);
@@ -187,7 +194,6 @@ void config_caches() {
     configure_l3(true, 256, 2, 8);
 
     change_wp(WRITE_BACK);
-    change_rp(RANDOM);
     change_rp(LRU);
 
     reset_caches();
