@@ -181,10 +181,14 @@ void test_dq_flush(volatile unsigned char *offset, uint32_t size) {
 
 void config_caches() {
     enable_caches();
-    configure_l1i(true, 16, 2, 8);
-    configure_l1d(true, 16, 2, 8);
-    configure_l2(false, 64, 2, 8);
-    configure_l3(true, 16, 2, 8);
+    configure_l1i(true, 32, 2, 8);
+    configure_l1d(true, 32, 2, 8);
+    configure_l2(true, 128, 2, 8);
+    configure_l3(true, 256, 2, 8);
+
+    change_wp(WRITE_BACK);
+    change_rp(RANDOM);
+    change_rp(LRU);
 
     reset_caches();
 }
@@ -224,7 +228,7 @@ void kernel_main(void) {
   /* Initialize terminal interface */
   terminal_initialize();
 
-  //config_caches();
+  config_caches();
 
   volatile unsigned char *mem_offset = (volatile unsigned char *)MMIO_MEM_START;
 

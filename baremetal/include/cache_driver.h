@@ -13,16 +13,16 @@
 
 // TODO: keep these in sync with their counterpart in the emulation code
 typedef enum {
-    LRU,
-    MRU,
-    RANDOM,
-    FIFO,
-    LIFO,
+    RANDOM = 0,
+    LRU = 1,
+    MRU = 2,
+    FIFO = 3,
+    LIFO = 4,
 } ReplacementPolicy;
 
 typedef enum {
-    WRITE_THROUGH,
-    WRITE_BACK,
+    WRITE_BACK = 0,
+    WRITE_THROUGH = 1,
 } WritePolicy;
 
 void disable_all_caches();
@@ -35,10 +35,10 @@ void enable_l3();
 
 // CONTRACT: These have to be powers of 2
 // INFO: Maybe we can simply pass the power of 2 as args
-void configure_l1i(bool enable, uint64_t size, uint8_t assoc, uint16_t block_size);
-void configure_l1d(bool enable, uint64_t size, uint8_t assoc, uint16_t block_size);
-void configure_l2(bool enable, uint64_t size, uint8_t assoc, uint16_t block_size);
-void configure_l3(bool enable, uint64_t size, uint8_t assoc, uint16_t block_size);
+void configure_l1i(bool enable, uint64_t size, uint8_t assoc, uint32_t block_size);
+void configure_l1d(bool enable, uint64_t size, uint8_t assoc, uint32_t block_size);
+void configure_l2(bool enable, uint64_t size, uint8_t assoc, uint32_t block_size);
+void configure_l3(bool enable, uint64_t size, uint8_t assoc, uint32_t block_size);
 
 // This reinits the caches, and updates their config to what is required
 void reset_caches();

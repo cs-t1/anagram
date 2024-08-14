@@ -1,6 +1,6 @@
 { stdenv, crossgcc, grub2, xorriso, is_64bits ? false, ... }:
 let baseName = if is_64bits then "x86_64" else "i686";
-  flags = "-std=gnu99 -ffreestanding -O2 -Wall -Wextra";
+  flags = "-std=gnu99 -ffreestanding -O2 -Wall -Wextra -Wpedantic";
 in stdenv.mkDerivation {
   name = "bos";
   src = ./.;

@@ -1,23 +1,13 @@
 #include "../include/cache_driver.h"
+#include "../include/shared.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
-static void configure_level_internal(uint8_t level, bool enable,
-                                     uint64_t size, uint8_t assoc,
-                                     uint16_t block_size) {
-  uint64_t cache_offset =
-      CACHE_CONFIG_BASE + 32u + (level - 1u) * 32;
-  volatile bool *c_enable = (bool *)(size_t)cache_offset;
-  volatile uint64_t *c_size = (uint64_t *)(size_t)(cache_offset + 8);
-  volatile uint8_t *c_assoc = (uint8_t *)(size_t)(cache_offset + 16);
-  volatile uint32_t *c_block_size = (uint32_t *)(size_t)(cache_offset + 24);
-
-  *c_enable = enable;
-  *c_size = size;
-  *c_assoc = assoc;
-  *c_block_size = block_size;
-}
+SingleCacheConfigRequest *l1i_req = (SingleCacheConfigRequest *)(size_t)(CACHE_CONFIG_BASE + 32);
+SingleCacheConfigRequest *l1d_req = (SingleCacheConfigRequest *)(size_t)(CACHE_CONFIG_BASE + 64);
+SingleCacheConfigRequest *l2_req = (SingleCacheConfigRequest *)(size_t)(CACHE_CONFIG_BASE + 96);
+SingleCacheConfigRequest *l3_req = (SingleCacheConfigRequest *)(size_t)(CACHE_CONFIG_BASE + 128);
 
 void enable_caches() {
     uint8_t *ptr = CACHE_CONFIG_BASE;
@@ -26,23 +16,35 @@ void enable_caches() {
 }
 
 void configure_l1i(bool enable, uint64_t size, uint8_t assoc,
-                  uint16_t block_size) {
-  configure_level_internal(1, enable, size, assoc, block_size);
+                  uint32_t block_size) {
+    l1i_req->enable = enable;
+    l1i_req->size = size;
+    l1i_req->assoc = assoc;
+    l1i_req->block_size = block_size;
 }
 
 void configure_l1d(bool enable, uint64_t size, uint8_t assoc,
-                  uint16_t block_size) {
-  configure_level_internal(2, enable, size, assoc, block_size);
+                  uint32_t block_size) {
+    l1d_req->enable = enable;
+    l1d_req->size = size;
+    l1d_req->assoc = assoc;
+    l1d_req->block_size = block_size;
 }
 
 void configure_l2(bool enable, uint64_t size, uint8_t assoc,
-                  uint16_t block_size) {
-  configure_level_internal(3, enable, size, assoc, block_size);
+                  uint32_t block_size) {
+    l2_req->enable = enable;
+    l2_req->size = size;
+    l2_req->assoc = assoc;
+    l2_req->block_size = block_size;
 }
 
 void configure_l3(bool enable, uint64_t size, uint8_t assoc,
-                  uint16_t block_size) {
-  configure_level_internal(4, enable, size, assoc, block_size);
+                  uint32_t block_size) {
+    l3_req->enable = enable;
+    l3_req->size = size;
+    l3_req->assoc = assoc;
+    l3_req->block_size = block_size;
 }
 
 void flush_caches() {
@@ -123,3 +125,12 @@ inline void set_s_model(uint8_t val, bool is_up) {
      *ptr = val;
 }
 
+void change_wp(WritePolicy wp) {
+    volatile uint8_t *ptr = (uint8_t *)(size_t)(CACHE_CONFIG_BASE + 12);
+    *ptr = wp == WRITE_BACK ? 0 : 1;
+}
+
+void change_rp(ReplacementPolicy rp) {
+    volatile uint8_t *ptr = (uint8_t *)(size_t)(CACHE_CONFIG_BASE + 16);
+    *ptr = (uint8_t)rp;
+}
