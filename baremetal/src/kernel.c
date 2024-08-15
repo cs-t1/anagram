@@ -109,9 +109,9 @@ void test_dq_poll(volatile unsigned char *offset, uint32_t size) {
       asm volatile("nop" ::: "memory");
   }
 
-  uint64_t db = 0b1101111010101101101111101110111111011110101011011011111011101111;
+  uint64_t db = 0b1010110111011110;
   set_dq_model(db, true);
-  set_dq_model(~db, false);
+  set_dq_model((~db) & 0xffff, false);
 
   terminal_setcolor(VGA_COLOR_WHITE);
   printf("00 ");
@@ -154,9 +154,9 @@ void test_dq_flush(volatile unsigned char *offset, uint32_t size) {
       asm volatile("nop" ::: "memory");
   }
 
-  uint64_t db = 0b1101111010101101101111101110111111011110101011011011111011101111;
+  uint64_t db = 0b1010110111011110;
   set_dq_model(db, true);
-  set_dq_model(~db, false);
+  set_dq_model((~db) & 0xffff, false);
 
   flush_caches();
 
