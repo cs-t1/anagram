@@ -50,7 +50,7 @@ void test_abas_poll(volatile unsigned char *offset, uint32_t size) {
       if ((uint32_t)found == i % 0x100) {
           terminal_setcolor(VGA_COLOR_GREEN);
       } else {
-          terminal_setcolor(VGA_COLOR_RED);
+          terminal_setcolor(VGA_COLOR_LIGHT_RED);
       }
 
       printf("%x ", found);
@@ -87,7 +87,7 @@ void test_abas_flush(volatile unsigned char *offset, uint32_t size) {
       if ((uint32_t)found == i % 0x100) {
           terminal_setcolor(VGA_COLOR_GREEN);
       } else {
-          terminal_setcolor(VGA_COLOR_RED);
+          terminal_setcolor(VGA_COLOR_LIGHT_RED);
       }
 
       printf("%x ", found);
@@ -131,7 +131,7 @@ void test_dq_poll(volatile unsigned char *offset, uint32_t size) {
       if ((uint32_t)found == 0x42) {
           terminal_setcolor(VGA_COLOR_GREEN);
       } else {
-          terminal_setcolor(VGA_COLOR_RED);
+          terminal_setcolor(VGA_COLOR_LIGHT_RED);
       }
 
       printf("%x ", found);
@@ -178,7 +178,7 @@ void test_dq_flush(volatile unsigned char *offset, uint32_t size) {
       if ((uint32_t)found == 0x42) {
           terminal_setcolor(VGA_COLOR_GREEN);
       } else {
-          terminal_setcolor(VGA_COLOR_RED);
+          terminal_setcolor(VGA_COLOR_LIGHT_RED);
       }
 
       printf("%x ", found);

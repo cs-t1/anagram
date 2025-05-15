@@ -31,6 +31,8 @@ _minted*
 *.bak*
 *.loa
 
+**/*backups
+
 *.o
 
 lean_model/.lake
